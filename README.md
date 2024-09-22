@@ -1,5 +1,5 @@
-Weather Dashboard API
-Description
+#Weather Dashboard API
+##Description
 The Weather Dashboard API is a Flask-based application that allows users to register, authenticate, and manage their favorite cities and temperatures. It integrates with the OpenWeather API to provide current weather data for saved cities.
 
 Features
