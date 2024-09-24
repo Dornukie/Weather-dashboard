@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -7,6 +8,8 @@ from models import db, User, City, Temperature
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
+
+# Load environment variables from .env file
 load_dotenv()
 
 # Initialize Flask app
@@ -16,7 +19,7 @@ app.config.from_object(Config)
 # Initialize extensions
 db.init_app(app)
 bcrypt = Bcrypt(app)
-jwt = JWTManager(app)  
+jwt = JWTManager(app)
 
 def create_tables():
     db.create_all()
@@ -57,7 +60,7 @@ def login():
 
 # POST /cities - Save a favorite city
 @app.route('/cities', methods=['POST'])
-@jwt_required()  
+@jwt_required()
 def add_city():
     data = request.get_json()
     city_name = data.get('city_name')
@@ -73,7 +76,7 @@ def add_city():
 
 # GET /cities - Get all saved cities
 @app.route('/cities', methods=['GET'])
-@jwt_required()  
+@jwt_required()
 def get_cities():
     cities = City.query.all()
     result = [{'id': city.id, 'name': city.name} for city in cities]
@@ -82,7 +85,7 @@ def get_cities():
 
 # POST /temps - Save temperatures of various cities
 @app.route('/temps', methods=['POST'])
-@jwt_required()  
+@jwt_required()
 def add_temp():
     data = request.get_json()
     city_id = data.get('city_id')
@@ -106,7 +109,6 @@ def get_temps():
         print(f"Error in get_temps endpoint: {e}")
         return jsonify({'message': 'Internal server error'}), 500
 
-
 # GET /city/temp/<id> - Get the temp of a specific city by city ID
 @app.route('/city/temp/<int:id>', methods=['GET'])
 @jwt_required()
@@ -122,10 +124,9 @@ def get_city_temp(id):
         print(f"Error in get_city_temp endpoint: {e}")
         return jsonify({'message': 'Internal server error'}), 500
 
-
 # GET /weather - Get current weather for saved cities using OpenWeather API
 @app.route('/weather', methods=['GET'])
-@jwt_required()  
+@jwt_required()
 def get_weather():
     cities = City.query.all()
     api_key = app.config['WEATHER_API_KEY']
