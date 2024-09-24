@@ -16,7 +16,7 @@ app.config.from_object(Config)
 # Initialize extensions
 db.init_app(app)
 bcrypt = Bcrypt(app)
-jwt = JWTManager(app)  # Initialize JWTManager with the Flask app
+jwt = JWTManager(app)  
 
 def create_tables():
     db.create_all()
@@ -57,7 +57,7 @@ def login():
 
 # POST /cities - Save a favorite city
 @app.route('/cities', methods=['POST'])
-@jwt_required()  # Require JWT authentication for this endpoint
+@jwt_required()  
 def add_city():
     data = request.get_json()
     city_name = data.get('city_name')
@@ -73,7 +73,7 @@ def add_city():
 
 # GET /cities - Get all saved cities
 @app.route('/cities', methods=['GET'])
-@jwt_required()  # Require JWT authentication for this endpoint
+@jwt_required()  
 def get_cities():
     cities = City.query.all()
     result = [{'id': city.id, 'name': city.name} for city in cities]
@@ -82,7 +82,7 @@ def get_cities():
 
 # POST /temps - Save temperatures of various cities
 @app.route('/temps', methods=['POST'])
-@jwt_required()  # Require JWT authentication for this endpoint
+@jwt_required()  
 def add_temp():
     data = request.get_json()
     city_id = data.get('city_id')
@@ -125,7 +125,7 @@ def get_city_temp(id):
 
 # GET /weather - Get current weather for saved cities using OpenWeather API
 @app.route('/weather', methods=['GET'])
-@jwt_required()  # Require JWT authentication for this endpoint
+@jwt_required()  
 def get_weather():
     cities = City.query.all()
     api_key = app.config['WEATHER_API_KEY']
